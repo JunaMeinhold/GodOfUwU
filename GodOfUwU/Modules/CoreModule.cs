@@ -1,11 +1,10 @@
 ﻿namespace GodOfUwU.Modules
 {
-    using Discord;
     using Discord.Commands;
     using Discord.Interactions;
     using GodOfUwU.Core;
-    using GodOfUwU.Core.Entities;
     using GodOfUwU.Core.Entities.Attributes;
+    using System.ComponentModel;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -13,78 +12,12 @@
     public class CoreModule : ModuleBase<SocketCommandContext>
     {
         private readonly InteractionService service;
+        private readonly CommandService commandService;
 
-        public CoreModule(InteractionService service)
+        public CoreModule(InteractionService service, CommandService commandService)
         {
             this.service = service;
-        }
-
-        [Command("reload-plugins")]
-        public async Task ReloadAsync()
-        {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                await ReplyAsync("Reloading plugins!");
-                await PluginLoader.Reload();
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
-        }
-
-        [Command("list-plugins")]
-        public async Task ListPluginsAsync()
-        {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                StringBuilder sb = new();
-                sb.AppendLine("Currently loaded plugins:");
-                foreach (Plugin plugin in PluginLoader.Plugins)
-                {
-                    sb.AppendLine(plugin.FullName);
-                }
-                await ReplyAsync(sb.ToString());
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
-        }
-
-        [Command("list-permissions")]
-        public async Task ListPermissionsAsync()
-        {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                StringBuilder sb = new();
-                sb.AppendLine("Permissions:");
-                foreach (Permission permission in UserContext.Current.Permissions)
-                {
-                    sb.AppendLine(permission.Name);
-                }
-                await ReplyAsync(sb.ToString());
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
-        }
-
-        [Command("set-log-level")]
-        public async Task SetLogLevelAsync(int level)
-        {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                LogSeverity severity = (LogSeverity)level;
-                Config.Default.LogLevel = severity;
-                await ReplyAsync($"Log level set to {severity}");
-                await PluginLoader.Reload();
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
+            this.commandService = commandService;
         }
 
         [Command("register-commands")]
@@ -142,6 +75,25 @@
             {
                 await ReplyAsync("No");
             }
+        }
+
+        [Command("help")]
+        [Description("Prints out the help menu")]
+        public async Task Help()
+        {
+            StringBuilder sb = new();
+            sb.AppendLine("Help Menu");
+            foreach (var command in commandService.Commands)
+            {
+                DescriptionAttribute? desc = (DescriptionAttribute?)command.Attributes.FirstOrDefault(x => x is DescriptionAttribute);
+                string args = string.Join(", ", command.Parameters.Select(x => $"{x.Name}: {x.Type.Name}"));
+                if (desc != null)
+                    sb.AppendLine($"{command.Name}:\t ({args})\t {desc.Description}");
+                else
+                    sb.AppendLine($"{command.Name}:\t ({args})\t");
+            }
+
+            await ReplyAsync(sb.ToString());
         }
     }
 }

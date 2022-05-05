@@ -1,45 +1,22 @@
 ﻿namespace GodOfUwU.Roles.Services
 {
-    using Discord.WebSocket;
-    using System.Threading.Tasks;
+    using GodOfUwU.Roles.Entities;
+    using Microsoft.EntityFrameworkCore;
 
-    public class RoleService
+    public class RoleService : DbContext
     {
-        private readonly DiscordSocketClient _client;
-
-        public RoleService(DiscordSocketClient client)
+        public RoleService()
         {
-            _client = client;
-            _client.GuildAvailable += GuildAvailable;
-            _client.GuildScheduledEventUserAdd += _client_GuildScheduledEventUserAdd;
-            _client.GuildScheduledEventUserRemove += _client_GuildScheduledEventUserRemove;
-            _client.GuildMembersDownloaded += _client_GuildMembersDownloaded;
-            _client.Ready += _client_Ready;
+            Database.EnsureCreated();
         }
 
-        private async Task _client_Ready()
-        {
-            await _client.DownloadUsersAsync(_client.Guilds);
-        }
+        public DbSet<User> Users { get; set; }
 
-        private Task _client_GuildMembersDownloaded(SocketGuild arg)
-        {
-            throw new NotImplementedException();
-        }
+        public DbSet<Role> Roles { get; set; }
 
-        private Task _client_GuildScheduledEventUserRemove(Discord.Cacheable<SocketUser, Discord.Rest.RestUser, Discord.IUser, ulong> arg1, SocketGuildEvent arg2)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            throw new NotImplementedException();
-        }
-
-        private Task _client_GuildScheduledEventUserAdd(Discord.Cacheable<SocketUser, Discord.Rest.RestUser, Discord.IUser, ulong> arg1, SocketGuildEvent arg2)
-        {
-            throw new NotImplementedException();
-        }
-
-        private Task GuildAvailable(SocketGuild arg)
-        {
-            return Task.CompletedTask;
+            optionsBuilder.UseSqlite($"Data Source=roles.sqlite");
         }
     }
 }
