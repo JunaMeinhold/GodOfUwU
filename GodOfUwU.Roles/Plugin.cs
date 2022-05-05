@@ -1,6 +1,7 @@
 ﻿namespace GodOfUwU.Roles
 {
     using Discord.WebSocket;
+    using GodOfUwU.Roles.Services;
     using Microsoft.Extensions.DependencyInjection;
     using System;
 
@@ -8,7 +9,7 @@
     {
         public override Task SetupServices(ServiceCollection services)
         {
-
+            services.AddSingleton<RoleService>();
             return Task.CompletedTask;
         }
 

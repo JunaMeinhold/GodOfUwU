@@ -7,47 +7,41 @@ using System.Threading.Tasks;
 
 public class ReactionService
 {
-    private const string Path = "reactions.json";
     private readonly DiscordSocketClient _client;
     private readonly Random random = new();
-    private ReactionFile file;
+    private readonly ReactionContext context;
 
     public ReactionService(DiscordSocketClient client)
     {
         _client = client;
         _client.MessageReceived += MessageReceived;
-        file = ReactionFile.Load(Path);
-    }
-
-    public void ReloadReactions()
-    {
-        file = ReactionFile.Load(Path);
+        context = new();
     }
 
     public void AddReaction(Reaction reaction)
     {
-        file.Reactions.Add(reaction);
-        file.Save(Path);
+        context.Reactions.Add(reaction);
+        context.SaveChanges();
     }
 
     public int ReactionCount()
     {
-        return file.Reactions.Count;
+        return context.Reactions.Count();
     }
 
     public void RemoveReaction(int index)
     {
-        file.Reactions.RemoveAt(index);
-        file.Save(Path);
+        context.Reactions.Remove(context.Reactions.ElementAt(index));
+        context.SaveChanges();
     }
 
     public string ListReactions()
     {
-        if (file.Reactions.Count == 0)
+        if (!context.Reactions.Any())
             return "No reactions in list";
         StringBuilder sb = new();
         int i = 0;
-        foreach (var reaction in file.Reactions)
+        foreach (var reaction in context.Reactions)
         {
             sb.AppendLine($"{i}:\t {reaction}");
             i++;
@@ -62,7 +56,7 @@ public class ReactionService
         if (arg.CleanContent.StartsWith("!") || arg.CleanContent.StartsWith("/"))
             return;
 
-        Reaction? reaction = file.Reactions.FirstOrDefault(x => x.Regex.IsMatch(arg.CleanContent));
+        Reaction? reaction = context.Reactions.FirstOrDefault(x => x.Regex.IsMatch(arg.CleanContent));
 
         if (reaction != null)
         {

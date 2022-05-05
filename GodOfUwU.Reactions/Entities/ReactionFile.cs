@@ -1,26 +1,22 @@
 ﻿namespace GodOfUwU.Entities;
+
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-public class ReactionFile
+public class ReactionContext : DbContext
 {
-    public List<Reaction> Reactions { get; set; } = new();
+    public DbSet<Reaction> Reactions { get; set; }
 
-    public static ReactionFile Load(string path)
+#pragma warning disable CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
+
+    public ReactionContext()
+#pragma warning restore CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
     {
-        if (File.Exists(path))
-        {
-            return JsonConvert.DeserializeObject<ReactionFile>(File.ReadAllText(path)) ?? new();
-        }
-        else
-        {
-            ReactionFile file = new();
-            file.Save(path);
-            return file;
-        }
+        Database.EnsureCreated();
     }
 
-    public void Save(string path)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        File.WriteAllText(path, JsonConvert.SerializeObject(this, Formatting.Indented));
+        optionsBuilder.UseSqlite($"Data Source=reactions.sqlite");
     }
 }

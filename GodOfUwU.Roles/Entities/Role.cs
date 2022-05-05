@@ -1,12 +1,12 @@
 ﻿namespace GodOfUwU.Roles.Entities
 {
-    using System;
+    using GodOfUwU.Core.Entities;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class Role
     {
+        public string Name { get; set; } = string.Empty;
+
+        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }

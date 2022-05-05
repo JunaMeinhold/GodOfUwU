@@ -40,6 +40,9 @@
 		<Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Reactions\bin\Debug\net6.0\*.dll&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
 		<Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Reactions\bin\Debug\net6.0\*.pdb&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
 		<Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Reactions\bin\Debug\net6.0\*.json&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
+    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Roles\bin\Debug\net6.0\*.dll&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
+    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Roles\bin\Debug\net6.0\*.pdb&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
+    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Roles\bin\Debug\net6.0\*.json&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
 	</Target>
 
 </Project>
