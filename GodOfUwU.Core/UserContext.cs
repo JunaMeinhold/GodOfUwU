@@ -9,9 +9,12 @@
 
     public class UserContext : DbContext
     {
-        private static bool firstsetup;
+        private static readonly bool firstsetup;
+
         public DbSet<User> Users { get; set; }
+
         public DbSet<Group> Groups { get; set; }
+
         public DbSet<Permission> Permissions { get; set; }
 
         public static UserContext Current { get; private set; }
