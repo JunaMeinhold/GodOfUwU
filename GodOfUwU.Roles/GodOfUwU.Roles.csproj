@@ -10,4 +10,10 @@
     <ProjectReference Include="..\GodOfUwU.Core\GodOfUwU.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="module.roles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
