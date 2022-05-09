@@ -10,9 +10,11 @@
             Database.EnsureCreated();
         }
 
+#nullable disable
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
+#nullable enable
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

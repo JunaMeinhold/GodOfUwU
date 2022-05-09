@@ -1,11 +1,5 @@
 ﻿namespace GodOfUwU.Admin.Modules
 {
-    using Discord;
-    using Discord.Commands;
-    using GodOfUwU.Core;
-    using GodOfUwU.Core.Entities;
-    using GodOfUwU.Core.Entities.Attributes;
-    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -18,7 +12,7 @@
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                User? user = UserContext.Current.Users.Include(u => u.Groups).FirstOrDefault(x => x.Id == duser.Id);
+                User? user = UserContext.Current.Users.FirstOrDefault(x => x.Id == duser.Id);
 
                 if (user == null)
                 {
@@ -26,7 +20,7 @@
                     return;
                 }
 
-                Group? group = UserContext.Current.Groups.Include(g => g.Users).FirstOrDefault(x => x.Name == groupname);
+                Group? group = UserContext.Current.Roles.FirstOrDefault(x => x.Name == groupname);
 
                 if (group == null)
                 {
@@ -44,7 +38,7 @@
                 group.Users.Add(user);
 
                 UserContext.Current.Users.Update(user);
-                UserContext.Current.Groups.Update(group);
+                UserContext.Current.Roles.Update(group);
 
                 await UserContext.Current.SaveChangesAsync();
 
@@ -56,12 +50,12 @@
             }
         }
 
-        [Command("group-user-delete")]
+        [Command("group-user-remove")]
         public async Task DeleteUserGroupAsync(string groupname, IUser duser)
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                User? user = UserContext.Current.Users.Include(u => u.Groups).FirstOrDefault(x => x.Id == duser.Id);
+                User? user = UserContext.Current.Users.FirstOrDefault(x => x.Id == duser.Id);
 
                 if (user == null)
                 {
@@ -69,7 +63,7 @@
                     return;
                 }
 
-                Group? group = UserContext.Current.Groups.Include(g => g.Users).FirstOrDefault(x => x.Name == groupname);
+                Group? group = UserContext.Current.Roles.FirstOrDefault(x => x.Name == groupname);
 
                 if (group == null)
                 {
@@ -87,7 +81,7 @@
                 group.Users.Remove(user);
 
                 UserContext.Current.Users.Update(user);
-                UserContext.Current.Groups.Update(group);
+                UserContext.Current.Roles.Update(group);
 
                 await UserContext.Current.SaveChangesAsync();
 
@@ -106,7 +100,7 @@
             {
                 StringBuilder sb = new();
                 sb.AppendLine("Groups:");
-                foreach (Group group in UserContext.Current.Groups.Include(g => g.Users).ThenInclude(u => u.Groups))
+                foreach (Group group in UserContext.Current.Roles)
                 {
                     sb.AppendLine($"{group}, with {group.Users.Count} users");
                 }
@@ -123,7 +117,7 @@
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                Group? group = UserContext.Current.Groups.Include(g => g.Users).Include(g => g.Permissions).FirstOrDefault(x => x.Name == name);
+                Group? group = UserContext.Current.Roles.FirstOrDefault(x => x.Name == name);
                 if (group == null)
                 {
                     await ReplyAsync($"Group {name} does not exists");
@@ -150,7 +144,7 @@
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                if (UserContext.Current.Groups.Any(x => x.Name == name))
+                if (UserContext.Current.Roles.Any(x => x.Name == name))
                 {
                     await ReplyAsync($"Group {name} already exists");
                     return;
@@ -158,7 +152,7 @@
 
                 Group group = new() { Name = name };
 
-                await UserContext.Current.Groups.AddAsync(group);
+                await UserContext.Current.Roles.AddAsync(group);
 
                 await UserContext.Current.SaveChangesAsync();
 
@@ -170,19 +164,19 @@
             }
         }
 
-        [Command("group-delete")]
+        [Command("group-remove")]
         public async Task DeleteGroupAsync(string name)
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                Group? group = UserContext.Current.Groups.FirstOrDefault(x => x.Name == name);
+                Group? group = UserContext.Current.Roles.FirstOrDefault(x => x.Name == name);
                 if (group == null)
                 {
                     await ReplyAsync($"Group {name} does not exists");
                     return;
                 }
 
-                UserContext.Current.Groups.Remove(group);
+                UserContext.Current.Roles.Remove(group);
 
                 await UserContext.Current.SaveChangesAsync();
 
@@ -199,7 +193,7 @@
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                Group? group = UserContext.Current.Groups.Include(g => g.Permissions).FirstOrDefault(x => x.Name == groupname);
+                Group? group = UserContext.Current.Roles.FirstOrDefault(x => x.Name == groupname);
                 if (group == null)
                 {
                     await ReplyAsync($"Group {groupname} does not exists");
@@ -216,7 +210,7 @@
 
                 group.Permissions.Add(permission);
 
-                UserContext.Current.Groups.Update(group);
+                UserContext.Current.Roles.Update(group);
 
                 await UserContext.Current.SaveChangesAsync();
 
@@ -228,12 +222,12 @@
             }
         }
 
-        [Command("group-perm-delete")]
+        [Command("group-perm-remove")]
         public async Task DeletePermToGroup(string groupname, string permissionname)
         {
             if (UserContext.CheckPermission(Context.User, typeof(GroupModule)))
             {
-                Group? group = UserContext.Current.Groups.Include(g => g.Permissions).FirstOrDefault(x => x.Name == groupname);
+                Group? group = UserContext.Current.Roles.FirstOrDefault(x => x.Name == groupname);
                 if (group == null)
                 {
                     await ReplyAsync($"Group {groupname} does not exists");
@@ -256,7 +250,7 @@
 
                 group.Permissions.Remove(permission);
 
-                UserContext.Current.Groups.Update(group);
+                UserContext.Current.Roles.Update(group);
 
                 await UserContext.Current.SaveChangesAsync();
 

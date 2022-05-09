@@ -1,8 +1,9 @@
-﻿namespace GodOfUwU;
+﻿namespace GodOfUwU.Core.Handlers;
 
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using GodOfUwU.Core;
 using System;
 using System.Reflection;
 
@@ -36,8 +37,9 @@ public class InteractionHandler
             await _interaction.ExecuteCommandAsync(ctx, _services);
         };
 
-        if (GodUwUClient.RegisterCommands)
+        if (PluginLoader.RegisterCommands)
             await _interaction.RegisterCommandsGloballyAsync();
+        PluginLoader.RegisterCommands = false;
     }
 
     private async Task ButtonExecuted(SocketMessageComponent arg)

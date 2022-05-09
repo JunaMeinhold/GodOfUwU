@@ -2,6 +2,7 @@
 
 using Discord;
 using Discord.WebSocket;
+using GodOfUwU.Core;
 using Victoria;
 using Victoria.Enums;
 using Victoria.Responses.Search;

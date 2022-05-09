@@ -38,5 +38,15 @@
         {
             return Name == other?.Name;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as PluginDesc);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Version, Path);
+        }
     }
 }

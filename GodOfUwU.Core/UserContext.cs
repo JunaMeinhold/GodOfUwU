@@ -1,35 +1,30 @@
 ﻿namespace GodOfUwU.Core
 {
     using Discord;
+    using Discord.Commands;
     using GodOfUwU.Core.Entities;
     using GodOfUwU.Core.Entities.Attributes;
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
-    using System.Runtime.CompilerServices;
 
     public class UserContext : DbContext
     {
-        private static readonly bool firstsetup;
+#nullable disable
+        public DbSet<Guild> Guilds { get; set; }
+
+        public DbSet<GuildUser> GuildUsers { get; set; }
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public DbSet<Permission> Permissions { get; set; }
 
-        public static UserContext Current { get; private set; }
+#nullable enable
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-        private UserContext()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public UserContext()
         {
-        }
-
-        static UserContext()
-        {
-            Current = new UserContext();
-            firstsetup = Current.Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         public async Task UpdatePermissions()
@@ -43,16 +38,6 @@
                 {
                     await UpdatePermissions(plugin.Assembly);
                 }
-            }
-
-            if (firstsetup)
-            {
-                Group group = new() { Name = Group.DefaultGroup };
-                Current.Groups.Add(group);
-                Group group1 = new() { Name = Group.RootGroup, };
-                group1.Permissions.Add(Permissions.First(x => x.Name == "*"));
-                Current.Groups.Add(group1);
-                Current.SaveChanges();
             }
         }
 
@@ -75,28 +60,49 @@
             }
         }
 
-        public static bool CheckPermission(IUser duser, Type type, [CallerMemberName] string method = "")
+        public bool CheckPermission(IUser duser, CommandInfo command)
         {
             if (duser.Id == 308203742736678914)
                 return true;
 
-            User? user = Current.Users.Include(u => u.Groups).ThenInclude(g => g.Permissions).FirstOrDefault(x => x.Id == duser.Id);
+            User? user = Users.FirstOrDefault(x => x.Id == duser.Id);
             if (user == null)
                 return false;
 
-            PermissionNamespaceAttribute? attr = type.GetCustomAttribute<PermissionNamespaceAttribute>();
-            if (attr != null)
-            {
-                string perm = attr.FindPermission(method);
-                return user.Groups.Any(x => x.Permissions.Any(y => y.Name == "*" || y.Name == perm || y.Name.StartsWith(attr.Name + ".*")));
-            }
+            PermissionAttribute? attr = (PermissionAttribute?)command.Attributes.FirstOrDefault(x => x is PermissionAttribute);
+            if (attr == null)
+                return true;
 
-            return false;
+            string perm = attr.PermissionString;
+            return user.Roles.Any(x => x.Permissions.Any(y => y.Name == "*" || y.Name == perm || y.Name == attr.Space + ".*"));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Data Source={Config.Default.PermissionsFile}");
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseSqlite($"Data Source=database.sqlite");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<GuildUser>()
+                .HasKey(gu => new { gu.UserId, gu.GuildId });
+
+            modelBuilder
+                .Entity<GuildUser>()
+                .HasOne(u => u.Guild)
+                .WithMany(u => u.Users)
+                .HasForeignKey(gu => gu.GuildId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<GuildUser>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.Guilds)
+                .HasForeignKey(gu => gu.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

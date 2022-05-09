@@ -8,7 +8,9 @@
     public class Permission
     {
         [Key]
-        public string Name { get; set; } = string.Empty;
+        public virtual string Name { get; set; } = string.Empty;
+
+        public virtual List<Role> Roles { get; set; } = new();
 
         public static IEnumerable<Permission> GetPermissions(Assembly assembly)
         {

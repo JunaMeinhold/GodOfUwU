@@ -1,7 +1,6 @@
-﻿namespace GodOfUwU
+﻿namespace GodOfUwU.Core
 {
     using Discord;
-    using GodOfUwU.Core;
     using System.Reflection;
     using System.Runtime.Loader;
 
@@ -9,8 +8,8 @@
     {
         private const string PluginsPath = "./plugins/";
         private static AssemblyLoadContext context;
-        private static List<Assembly> loadedAssemblies = new();
-        private static List<Plugin> loadedPlugins = new();
+        private static readonly List<Assembly> loadedAssemblies = new();
+        private static readonly List<Plugin> loadedPlugins = new();
 
         static PluginLoader()
         {
@@ -28,6 +27,8 @@
         public static event Func<Task>? Reloaded;
 
         public static event Func<LogMessage, Task>? Log;
+
+        public static bool RegisterCommands { get; set; }
 
         public static async Task Load()
         {
@@ -47,7 +48,7 @@
                     Register(desc);
             }
 
-            await UserContext.Current.UpdatePermissions();
+            //await UserContext.Current.UpdatePermissions();
 
             if (Loaded != null)
                 await Loaded.Invoke();

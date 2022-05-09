@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>520e8dfa-96bd-4ba2-a07f-37821e006a6f</UserSecretsId>
+    <ErrorReport>none</ErrorReport>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,9 +41,6 @@
 		<Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Reactions\bin\Debug\net6.0\*.dll&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
 		<Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Reactions\bin\Debug\net6.0\*.pdb&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
 		<Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Reactions\bin\Debug\net6.0\*.json&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
-    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Roles\bin\Debug\net6.0\*.dll&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
-    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Roles\bin\Debug\net6.0\*.pdb&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
-    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)GodOfUwU.Roles\bin\Debug\net6.0\*.json&quot; &quot;$(ProjectDir)$(OutDir)plugins\&quot;" />
 	</Target>
 
 </Project>

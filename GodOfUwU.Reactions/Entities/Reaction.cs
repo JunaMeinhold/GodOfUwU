@@ -54,9 +54,12 @@ public class Reaction
 
 public class Reply
 {
+#nullable disable
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public string Text { get; set; }
+#nullable enable
 }

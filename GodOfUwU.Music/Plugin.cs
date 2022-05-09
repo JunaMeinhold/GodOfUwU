@@ -2,6 +2,7 @@
 {
     using Discord;
     using Discord.WebSocket;
+    using GodOfUwU.Core;
     using GodOfUwU.Services;
     using Microsoft.Extensions.DependencyInjection;
     using System;

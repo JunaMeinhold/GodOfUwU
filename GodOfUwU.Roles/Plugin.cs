@@ -1,6 +1,7 @@
 ﻿namespace GodOfUwU.Roles
 {
     using Discord.WebSocket;
+    using GodOfUwU.Core;
     using GodOfUwU.Roles.Services;
     using Microsoft.Extensions.DependencyInjection;
     using System;

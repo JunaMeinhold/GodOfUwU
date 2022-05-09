@@ -1,6 +1,7 @@
 ﻿namespace GodOfUwU.Music
 {
     using Discord.WebSocket;
+    using GodOfUwU.Core;
     using Microsoft.Extensions.DependencyInjection;
     using System;
 

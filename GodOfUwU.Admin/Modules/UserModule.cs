@@ -5,7 +5,6 @@
     using GodOfUwU.Core;
     using GodOfUwU.Core.Entities;
     using GodOfUwU.Core.Entities.Attributes;
-    using Microsoft.EntityFrameworkCore;
     using System.Text;
 
     [PermissionNamespace(typeof(UserModule), "users")]
@@ -18,7 +17,7 @@
             {
                 StringBuilder sb = new();
                 sb.AppendLine("Users:");
-                foreach (User user in UserContext.Current.Users.Include(u => u.Groups).ThenInclude(g => g.Users))
+                foreach (User user in UserContext.Current.Users)
                 {
                     sb.AppendLine($"{Context.Client.GetUser(user.Id)}, {string.Join("; ", user.Groups)}");
                 }
@@ -35,7 +34,7 @@
         {
             if (UserContext.CheckPermission(Context.User, typeof(UserModule)))
             {
-                User? user = UserContext.Current.Users.Include(x => x.Groups).FirstOrDefault(u => u.Id == duser.Id);
+                User? user = UserContext.Current.Users.FirstOrDefault(u => u.Id == duser.Id);
                 if (user == null)
                 {
                     await ReplyAsync($"User {duser} not found");
@@ -71,13 +70,13 @@
 
                 await UserContext.Current.SaveChangesAsync();
 
-                Group group = UserContext.Current.Groups.Include(g => g.Users).First(g => g.Name == Group.DefaultGroup);
+                Group group = UserContext.Current.Roles.First(g => g.Name == Group.DefaultGroup);
 
                 user.Groups.Add(group);
                 group.Users.Add(user);
 
                 UserContext.Current.Users.Update(user);
-                UserContext.Current.Groups.Update(group);
+                UserContext.Current.Roles.Update(group);
 
                 await UserContext.Current.SaveChangesAsync();
 
@@ -89,12 +88,12 @@
             }
         }
 
-        [Command("user-delete")]
+        [Command("user-remove")]
         public async Task DeleteUserAsync(IUser duser)
         {
             if (UserContext.CheckPermission(Context.User, typeof(UserModule)))
             {
-                User? user = UserContext.Current.Users.Include(u => u.Groups).FirstOrDefault(u => u.Id == duser.Id);
+                User? user = UserContext.Current.Users.FirstOrDefault(u => u.Id == duser.Id);
                 if (user == null)
                 {
                     await ReplyAsync($"User {duser} not found");

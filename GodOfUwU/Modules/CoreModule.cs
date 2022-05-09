@@ -5,6 +5,7 @@
     using GodOfUwU.Core;
     using GodOfUwU.Core.Entities.Attributes;
     using System.ComponentModel;
+    using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -20,61 +21,42 @@
             this.commandService = commandService;
         }
 
+        [Command("about")]
+        public async Task About()
+        {
+            StringBuilder sb = new();
+            sb.AppendLine($"currently running version {Assembly.GetExecutingAssembly().GetName().Version}");
+            sb.AppendLine("created by Juna");
+            await ReplyAsync(sb.ToString());
+        }
+
         [Command("register-commands")]
         public async Task RegisterGlobalAsync()
         {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                await ReplyAsync("Updating commands");
-                GodUwUClient.RegisterCommands = true;
-                await PluginLoader.Reload();
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
+            await ReplyAsync("Updating commands");
+            PluginLoader.RegisterCommands = true;
+            await PluginLoader.Reload();
         }
 
         [Command("clear-global-commands")]
         public async Task ClearGlobalAsync()
         {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                await Context.Client.Rest.DeleteAllGlobalCommandsAsync();
-                await ReplyAsync("Clearing global commands");
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
+            await Context.Client.Rest.DeleteAllGlobalCommandsAsync();
+            await ReplyAsync("Clearing global commands");
         }
 
         [Command("register-guild-commands")]
         public async Task RegisterGuildAsync()
         {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                await service.AddCommandsToGuildAsync(Context.Guild);
-                await ReplyAsync("Finished!");
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
+            await service.AddCommandsToGuildAsync(Context.Guild);
+            await ReplyAsync("Finished!");
         }
 
         [Command("clear-guild-commands")]
         public async Task ClearGuildAsync()
         {
-            if (UserContext.CheckPermission(Context.User, typeof(CoreModule)))
-            {
-                await Context.Guild.DeleteApplicationCommandsAsync();
-                await ReplyAsync("Clearing guild commands");
-            }
-            else
-            {
-                await ReplyAsync("No");
-            }
+            await Context.Guild.DeleteApplicationCommandsAsync();
+            await ReplyAsync("Clearing guild commands");
         }
 
         [Command("help")]

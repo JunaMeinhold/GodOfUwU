@@ -1,4 +1,4 @@
-﻿namespace GodOfUwU
+﻿namespace GodOfUwU.Core
 {
     using Discord.WebSocket;
     using Microsoft.Extensions.DependencyInjection;

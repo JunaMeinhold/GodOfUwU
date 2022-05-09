@@ -1,8 +1,10 @@
-﻿namespace GodOfUwU;
+﻿namespace GodOfUwU.Core.Handlers;
 
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using GodOfUwU.Core;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 public class CommandHandler
@@ -53,6 +55,18 @@ public class CommandHandler
             return;
 
         var context = new SocketCommandContext(_client, userMessage);
-        await _commands.ExecuteAsync(context, argPos, _services);
+        var result = _commands.Search(context, argPos);
+        MatchResult res = (MatchResult)await _commands.ValidateAndGetBestMatch(result, context, _services);
+
+        if (res.IsSuccess)
+        {
+            if (res.Match.HasValue)
+            {
+                if (_services.GetService<UserContext>()?.CheckPermission(socketMessage.Author, res.Match.Value.Command) ?? false)
+                {
+                    await _commands.ExecuteAsync(context, argPos, _services);
+                }
+            }
+        }
     }
 }

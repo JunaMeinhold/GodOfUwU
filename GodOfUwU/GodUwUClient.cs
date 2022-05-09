@@ -5,9 +5,9 @@
     using Discord.Interactions;
     using Discord.WebSocket;
     using GodOfUwU.Core;
-    using GodOfUwU.Core.Entities;
+    using GodOfUwU.Core.Handlers;
+    using GodOfUwU.Core.Services;
     using GodOfUwU.Entities;
-    using GodOfUwU.Services;
     using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Threading.Tasks;
@@ -19,8 +19,7 @@
         private InteractionService interactionService;
         private CommandService cmdService;
         private IServiceProvider? services;
-
-        public static bool RegisterCommands { get; set; }
+        private CoreService? coreService;
 
         public GodUwUClient()
         {
@@ -32,6 +31,7 @@
 
             client = new DiscordSocketClient(new DiscordSocketConfig
             {
+                GatewayIntents = GatewayIntents.All,
                 AlwaysDownloadUsers = true,
                 MessageCacheSize = 50,
                 LogLevel = Config.Default.LogLevel,
@@ -46,7 +46,7 @@
             interactionService = new(client, new InteractionServiceConfig()
             {
                 LogLevel = Config.Default.LogLevel,
-                ThrowOnError = true,
+                UseCompiledLambda = true,
             });
         }
 
@@ -96,6 +96,8 @@
             client.Log += LogAsync;
             client.Ready += Ready;
 
+            coreService = services.GetService<CoreService>();
+
             foreach (Plugin plugin in PluginLoader.Plugins)
             {
                 await plugin.Load(services);
@@ -103,28 +105,6 @@
 
             await client.LoginAsync(TokenType.Bot, TokenConfig.Default.Token);
             await client.StartAsync();
-
-            bool exiting = false;
-            while (!exiting)
-            {
-                string? cli = Console.ReadLine();
-                if (cli == "exit")
-                    exiting = true;
-                if (cli == "user add")
-                {
-                    ulong id = ConsoleHelper.ReadULong("Id=");
-                    User user = new() { Id = id };
-                    await UserContext.Current.Users.AddAsync(user);
-                    await UserContext.Current.SaveChangesAsync();
-                }
-                if (cli == "user list")
-                {
-                    foreach (User user in UserContext.Current.Users)
-                    {
-                        Console.WriteLine(user);
-                    }
-                }
-            }
 
             await Task.Delay(-1);
         }
@@ -163,6 +143,8 @@
                     .AddSingleton(cmdService)
                     .AddSingleton(interactionService)
                     .AddSingleton(logService)
+                    .AddDbContext<UserContext>()
+                    .AddSingleton<CoreService>()
                     .BuildServiceProvider();
     }
 }

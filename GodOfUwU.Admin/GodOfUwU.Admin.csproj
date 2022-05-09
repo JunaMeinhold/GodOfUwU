@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Modules\GroupModule.cs" />
+    <Compile Remove="Modules\UserModule.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GodOfUwU.Core\GodOfUwU.Core.csproj" />
   </ItemGroup>
 
