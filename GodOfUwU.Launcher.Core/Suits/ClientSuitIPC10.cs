@@ -26,7 +26,6 @@
 
         private void Receive()
         {
-            while (_connected)
         }
     }
 }
