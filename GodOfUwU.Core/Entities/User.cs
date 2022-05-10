@@ -20,6 +20,8 @@
 
         public virtual List<GuildUser> Guilds { get; set; } = new();
 
+        public virtual List<Warning> Warnings { get; set; } = new();
+
         public GuildUser? GetGuildUser(IGuild guild)
         {
             return GetGuildUser(guild.Id);

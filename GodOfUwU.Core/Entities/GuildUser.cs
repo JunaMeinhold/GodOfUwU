@@ -19,7 +19,6 @@
             Guild = guild;
             LastActivity = DateTime.UtcNow;
             Roles = new();
-            Warnings = new();
         }
 
         public virtual ulong UserId { get; set; }
@@ -33,7 +32,5 @@
         public virtual DateTime LastActivity { get; set; }
 
         public virtual List<Role> Roles { get; set; }
-
-        public virtual List<Warning> Warnings { get; set; }
     }
 }

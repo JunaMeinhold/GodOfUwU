@@ -22,11 +22,6 @@
 
 #nullable enable
 
-        public UserContext()
-        {
-            Database.EnsureCreated();
-        }
-
         public async Task UpdatePermissions()
         {
             Assembly? entry = Assembly.GetEntryAssembly();

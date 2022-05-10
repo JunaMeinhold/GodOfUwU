@@ -3,6 +3,7 @@
     using Discord;
     using Discord.WebSocket;
     using GodOfUwU.Core.Entities;
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -17,6 +18,7 @@
         {
             this.client = client;
             this.context = context;
+            context.Database.Migrate();
             client.Ready += Ready;
             client.LeftGuild += LeftGuild;
             client.JoinedGuild += JoinedGuild;

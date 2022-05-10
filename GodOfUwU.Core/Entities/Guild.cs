@@ -19,6 +19,7 @@
             Users = new();
             Roles = new();
             ForbiddenTexts = new();
+            Warnings = new();
         }
 
         public virtual ulong Id { get; set; }
@@ -28,6 +29,8 @@
         public virtual List<Role> Roles { get; set; }
 
         public virtual List<ForbiddenText> ForbiddenTexts { get; set; }
+
+        public virtual List<Warning> Warnings { get; set; }
 
         public GuildUser? GetGuildUser(IUser user)
         {
