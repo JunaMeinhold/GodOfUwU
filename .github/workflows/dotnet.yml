@@ -24,9 +24,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish Win
-      run: dotnet publish /home/runner/work/GodOfUwU/GodOfUwU/ -c Release -a x64 --os win --self-contained -p:PublishReadyToRun=true
+      run: dotnet publish /home/runner/work/GodOfUwU/GodOfUwU/GodOfUwU/ -c Release -a x64 --os win --self-contained -p:PublishReadyToRun=true
     - name: Publish Linux
-      run: dotnet publish /home/runner/work/GodOfUwU/GodOfUwU/ -c Release -a x64 --os linux --self-contained -p:PublishReadyToRun=true
+      run: dotnet publish /home/runner/work/GodOfUwU/GodOfUwU/GodOfUwU/ -c Release -a x64 --os linux --self-contained -p:PublishReadyToRun=true
     - name: Upload Bot Win Build Artifact
       uses: actions/upload-artifact@v3
       with:
