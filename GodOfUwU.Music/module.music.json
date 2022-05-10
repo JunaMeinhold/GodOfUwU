@@ -1,8 +1,0 @@
-﻿{
-  "name": "Music",
-  "version": "1.0.0.0",
-  "path": "GodOfUwU.Music.dll",
-  "dependencies": [
-    "Admin"
-  ]
-}

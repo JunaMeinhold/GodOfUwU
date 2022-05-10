@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Octokit;
 using System.IO.Compression;
+using System.IO.Pipes;
 using System.Net;
 
 Console.WriteLine("Hello, World!");
@@ -15,6 +16,8 @@ Version localVersion = new("0.0.0.0"); //Replace this with your local version.
 
 string platformString = OperatingSystem.IsLinux() ? "linux" : "win";
 const string dir = "bin";
+AnonymousPipeServerStream pipeServer = new(PipeDirection.Out, HandleInheritability.Inheritable);
+Console.WriteLine($"[LAUNCHER] Current TransmissionMode: {pipeServer.TransmissionMode}");
 
 int versionComparison = localVersion.CompareTo(latestGitHubVersion);
 if (versionComparison < 0)

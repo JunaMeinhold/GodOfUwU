@@ -3,6 +3,7 @@
 using Discord.WebSocket;
 using GodOfUwU.Entities;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 public class ReactionService
@@ -56,11 +57,21 @@ public class ReactionService
         if (arg.CleanContent.StartsWith("!") || arg.CleanContent.StartsWith("/"))
             return;
 
-        Reaction? reaction = context.Reactions.FirstOrDefault(x => x.Regex.IsMatch(arg.CleanContent));
+        KeyValuePair<Match, Reaction> result = context.Reactions
+                  .Select(x => new KeyValuePair<Match, Reaction>(x.Regex.Match(arg.CleanContent), x))
+                  .FirstOrDefault(x => x.Key.Success);
 
-        if (reaction != null)
+        if (result.Key != null)
         {
-            await arg.Channel.SendMessageAsync(reaction.GetRandomReaction(random), messageReference: arg.Reference);
+            string reply = result.Value.GetRandomReaction(random);
+            int i = 0;
+            foreach (Group group in result.Key.Groups)
+            {
+                reply = reply.Replace($"{{{i}}}", group.Value);
+                i++;
+            }
+
+            await arg.Channel.SendMessageAsync(reply);
         }
     }
 }

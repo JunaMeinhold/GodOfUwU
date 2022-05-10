@@ -8,9 +8,11 @@
     using GodOfUwU.Core.Handlers;
     using GodOfUwU.Core.Services;
     using GodOfUwU.Entities;
+    using GodOfUwU.Services;
     using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Threading.Tasks;
+    using Victoria;
 
     public class GodUwUClient
     {
@@ -145,6 +147,10 @@
                     .AddSingleton(logService)
                     .AddDbContext<UserContext>()
                     .AddSingleton<CoreService>()
+                    .AddSingleton<LavaNode>()
+                    .AddSingleton<LavaConfig>()
+                    .AddSingleton<MusicService>()
+                    .AddSingleton<ReactionService>()
                     .BuildServiceProvider();
     }
 }
