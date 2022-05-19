@@ -1,6 +1,5 @@
-﻿namespace GodOfUwU.Core.TaskScheduler
+﻿namespace GodOfUwU.Core.Scheduling
 {
-    using GodOfUwU.Core.Scheduling;
     using System;
     using System.Threading.Tasks;
 

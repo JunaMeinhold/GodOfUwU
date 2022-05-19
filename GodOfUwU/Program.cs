@@ -2,5 +2,8 @@
 
 public class Program
 {
-    public static Task Main() => new GodUwUClient().InitializeAsync();
+    public static async Task Main()
+    {
+        await new GodUwUClient().InitializeAsync();
+    }
 }

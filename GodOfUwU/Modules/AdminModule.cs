@@ -11,6 +11,41 @@
     [PermissionNamespace(typeof(AdminModule), "admin")]
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
+        [Permission(typeof(AdminModule), "checkupdates")]
+        [Command("checkupdates")]
+        public async Task CheckUpdates()
+        {
+            string latestVersion = await Updater.GetLatestVersion();
+            string currentVersion = Updater.GetCurrentVersion();
+            int versionComparison = await Updater.CheckVersionAsync();
+
+            StringBuilder sb = new();
+            sb.AppendLine($"Current version: {currentVersion}");
+            sb.AppendLine($"Latest version: {latestVersion}");
+            sb.AppendLine(versionComparison < 0 ? "A new version is available" : versionComparison > 0 ? ":O you are using a newer version than my mom published" : "The bot is up to date");
+
+            EmbedBuilder builder = new();
+            builder.AddField(new EmbedFieldBuilder()
+            {
+                Name = "Update check",
+                Value = sb.ToString()
+            });
+
+            if (versionComparison < 0)
+            {
+                await ReplyAsync(embed: builder.Build(), components: new ComponentBuilder().WithButton("Update", "updatebutton").Build());
+            }
+            else
+                await ReplyAsync(embed: builder.Build());
+        }
+
+        [Permission(typeof(AdminModule), "restart")]
+        [Command("restart")]
+        public async Task RestartBot()
+        {
+            Updater.Restart();
+        }
+
         [Permission(typeof(AdminModule), "reload-plugins")]
         [Command("reload-plugins")]
         public async Task ReloadAsync()

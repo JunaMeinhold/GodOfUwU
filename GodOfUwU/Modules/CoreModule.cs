@@ -1,5 +1,6 @@
 ﻿namespace GodOfUwU.Modules
 {
+    using Discord;
     using Discord.Commands;
     using Discord.Interactions;
     using GodOfUwU.Core;
@@ -19,15 +20,6 @@
         {
             this.service = service;
             this.commandService = commandService;
-        }
-
-        [Command("about")]
-        public async Task About()
-        {
-            StringBuilder sb = new();
-            sb.AppendLine($"currently running version {Assembly.GetExecutingAssembly().GetName().Version}");
-            sb.AppendLine("created by Juna");
-            await ReplyAsync(sb.ToString());
         }
 
         [Command("register-commands")]
@@ -63,8 +55,8 @@
         [Description("Prints out the help menu")]
         public async Task Help()
         {
+            EmbedBuilder builder = new();
             StringBuilder sb = new();
-            sb.AppendLine("Help Menu");
             foreach (var command in commandService.Commands)
             {
                 DescriptionAttribute? desc = (DescriptionAttribute?)command.Attributes.FirstOrDefault(x => x is DescriptionAttribute);
@@ -74,8 +66,13 @@
                 else
                     sb.AppendLine($"{command.Name}:\t ({args})\t");
             }
-
-            await ReplyAsync(sb.ToString());
+            builder.AddField(new EmbedFieldBuilder()
+            {
+                Name = "Help page",
+                Value = sb.ToString(),
+            });
+            var cbuilder = new ComponentBuilder().WithButton("About", "aboutbutton");
+            await ReplyAsync(embed: builder.Build(), components: cbuilder.Build());
         }
     }
 }

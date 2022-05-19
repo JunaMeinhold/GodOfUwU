@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GodOfUwU", "GodOfUwU\GodOfU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GodOfUwU.Core", "GodOfUwU.Core\GodOfUwU.Core.csproj", "{E2E0F92B-2E88-484B-8852-7766338F0004}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GodOfUwU.Launcher", "GodOfUwU.Launcher\GodOfUwU.Launcher.csproj", "{EFB0CC53-4808-4A11-B093-5AB2294C5F7D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{E2E0F92B-2E88-484B-8852-7766338F0004}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2E0F92B-2E88-484B-8852-7766338F0004}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2E0F92B-2E88-484B-8852-7766338F0004}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFB0CC53-4808-4A11-B093-5AB2294C5F7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFB0CC53-4808-4A11-B093-5AB2294C5F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFB0CC53-4808-4A11-B093-5AB2294C5F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFB0CC53-4808-4A11-B093-5AB2294C5F7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
