@@ -27,6 +27,7 @@ public class InfoModule : InteractionModuleBase<SocketInteractionContext>
     [ComponentInteraction("updatebutton")]
     public async Task Update()
     {
+        if (Context.User.Id != 308203742736678914) return;
         await Context.Interaction.RespondAsync("Update in progress...");
         await Updater.Update();
     }

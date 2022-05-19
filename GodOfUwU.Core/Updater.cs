@@ -52,6 +52,18 @@
         {
             GitHubClient client = new(new ProductHeaderValue("GodOfUwULauncher"));
             IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("JunaMeinhold", "GodOfUwU");
+
+            Version latestGitHubVersion = new(releases[0].TagName);
+
+            Version localVersion = new(GetCurrentVersion());
+
+            int versionComparison = localVersion.CompareTo(latestGitHubVersion);
+
+            if (versionComparison >= 0)
+            {
+                return;
+            }
+
             const string dir = "tmp";
 
             if (Directory.Exists(dir))
