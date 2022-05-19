@@ -39,6 +39,14 @@
                 await ReplyAsync(embed: builder.Build());
         }
 
+        [Permission(typeof(AdminModule), "testupdatescript")]
+        [Command("testupdatescript")]
+        public Task TestScript()
+        {
+            Updater.TestUpdateScript();
+            return Task.CompletedTask;
+        }
+
         [Permission(typeof(AdminModule), "restart")]
         [Command("restart")]
         public async Task RestartBot()

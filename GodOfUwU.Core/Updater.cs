@@ -83,5 +83,19 @@
                 Environment.Exit(0);
             }
         }
+
+        public static void TestUpdateScript()
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                Process.Start("cmd.exe", "/c " + @".\tmp\update.bat");
+                Environment.Exit(0);
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Process.Start("bash", "tmp/update.sh");
+                Environment.Exit(0);
+            }
+        }
     }
 }
