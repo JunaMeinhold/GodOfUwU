@@ -51,6 +51,7 @@
         [Command("restart")]
         public async Task RestartBot()
         {
+            await ReplyAsync("Restarting...");
             Updater.Restart();
         }
 

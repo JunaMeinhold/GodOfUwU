@@ -11,8 +11,10 @@
     {
         public static void Restart()
         {
+#nullable disable
             // Starts a new instance of the program itself
             Process.Start(Environment.ProcessPath);
+#nullable enable
 
             // Closes the current process
             Environment.Exit(0);
