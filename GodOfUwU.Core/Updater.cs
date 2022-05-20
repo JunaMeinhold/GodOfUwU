@@ -12,7 +12,7 @@
         public static void Restart()
         {
             // Starts a new instance of the program itself
-            System.Diagnostics.Process.Start(Environment.ProcessPath);
+            Process.Start(Environment.ProcessPath);
 
             // Closes the current process
             Environment.Exit(0);

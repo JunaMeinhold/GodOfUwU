@@ -45,7 +45,7 @@
 
             string log = $"[{timeStamp}] {string.Format(format, arg.Source, $": {arg.Message}")}";
             Console.WriteLine(log);
-            _writer.WriteLine(log);
+            await _writer.WriteLineAsync(log);
 
             _semaphoreSlim.Release();
         }

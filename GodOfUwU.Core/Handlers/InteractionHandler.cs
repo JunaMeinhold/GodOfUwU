@@ -34,7 +34,6 @@ public class InteractionHandler
         _client.InteractionCreated += async interaction =>
         {
             var ctx = new SocketInteractionContext(_client, interaction);
-
             await _interaction.ExecuteCommandAsync(ctx, _services);
         };
 

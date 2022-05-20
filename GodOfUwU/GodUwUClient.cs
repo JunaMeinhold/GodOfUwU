@@ -42,7 +42,7 @@
             cmdService = new CommandService(new CommandServiceConfig
             {
                 LogLevel = Config.Default.LogLevel,
-                CaseSensitiveCommands = false
+                CaseSensitiveCommands = false,
             });
 
             interactionService = new(client, new InteractionServiceConfig()
@@ -99,6 +99,11 @@
             client.Ready += Ready;
 
             coreService = services.GetService<CoreService>();
+
+#nullable disable
+            var musicService = services.GetService<MusicService>();
+            await musicService.InitializeAsync();
+#nullable enable
 
             foreach (Plugin plugin in PluginLoader.Plugins)
             {

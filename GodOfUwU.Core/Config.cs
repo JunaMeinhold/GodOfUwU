@@ -13,7 +13,6 @@ public class Config
     };
 
     private LogSeverity logLevel = LogSeverity.Debug;
-    private string permissionsFile = "permissions.sqlite";
 
     static Config()
     {
@@ -22,8 +21,6 @@ public class Config
     }
 
     public static Config Default { get; set; }
-
-    public string PermissionsFile { get => permissionsFile; set => SetAndSave(ref permissionsFile, value); }
 
     public LogSeverity LogLevel { get => logLevel; set => SetAndSave(ref logLevel, value); }
 
