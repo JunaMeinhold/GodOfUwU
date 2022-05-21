@@ -15,9 +15,9 @@
                 Directory.CreateDirectory("./logs/");
             _fileStream = File.Create("./logs/" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + ".log");
             _writer = new(_fileStream);
-            _writer.AutoFlush = true;
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            _writer.AutoFlush = true;
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

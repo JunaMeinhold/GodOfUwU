@@ -83,7 +83,8 @@
             }
         }
 
-        public static void Restart()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
+        public void Restart()
         {
 #nullable disable
             // Starts a new instance of the program itself
@@ -94,7 +95,8 @@
             Environment.Exit(0);
         }
 
-        public static async Task<int> CheckVersionAsync()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
+        public async Task<int> CheckVersionAsync()
         {
             GitHubClient client = new(new ProductHeaderValue("GodOfUwULauncher"));
 
@@ -110,7 +112,8 @@
             return versionComparison;
         }
 
-        public static async Task<string> GetLatestVersion()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
+        public async Task<string> GetLatestVersion()
         {
             GitHubClient client = new(new ProductHeaderValue("GodOfUwULauncher"));
 
@@ -124,7 +127,8 @@
             return Assembly.GetExecutingAssembly().GetName()?.Version?.ToString() ?? string.Empty;
         }
 
-        public static async Task Update(ulong channelId)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
+        public async Task Update(ulong channelId)
         {
             GitHubClient client = new(new ProductHeaderValue("GodOfUwULauncher"));
             IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("JunaMeinhold", "GodOfUwU");
@@ -176,7 +180,8 @@
             }
         }
 
-        public static void TestUpdateScript(ulong channelId)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
+        public void TestUpdateScript(ulong channelId)
         {
             byte[] buffer = new byte[8];
             BinaryPrimitives.WriteUInt64LittleEndian(buffer, channelId);

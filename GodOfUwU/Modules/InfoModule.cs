@@ -8,6 +8,13 @@ using System.Text;
 
 public class InfoModule : InteractionModuleBase<SocketInteractionContext>
 {
+    private readonly UpdateService updateService;
+
+    public InfoModule(UpdateService updateService)
+    {
+        this.updateService = updateService;
+    }
+
     [ComponentInteraction("aboutbutton")]
     public async Task About()
     {
@@ -29,6 +36,6 @@ public class InfoModule : InteractionModuleBase<SocketInteractionContext>
     {
         if (Context.User.Id != 308203742736678914) return;
         await Context.Interaction.RespondAsync("Update in progress...");
-        await UpdateService.Update(Context.Channel.Id);
+        await updateService.Update(Context.Channel.Id);
     }
 }

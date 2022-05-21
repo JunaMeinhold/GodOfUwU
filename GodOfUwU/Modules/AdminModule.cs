@@ -11,13 +11,20 @@
     [PermissionNamespace(typeof(AdminModule), "admin")]
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
+        private readonly UpdateService updateService;
+
+        public AdminModule(UpdateService updateService)
+        {
+            this.updateService = updateService;
+        }
+
         [Permission(typeof(AdminModule), "checkupdates")]
         [Command("checkupdates")]
         public async Task CheckUpdates()
         {
-            string latestVersion = await UpdateService.GetLatestVersion();
+            string latestVersion = await updateService.GetLatestVersion();
             string currentVersion = UpdateService.GetCurrentVersion();
-            int versionComparison = await UpdateService.CheckVersionAsync();
+            int versionComparison = await updateService.CheckVersionAsync();
 
             StringBuilder sb = new();
             sb.AppendLine($"Current version: {currentVersion}");
@@ -43,7 +50,7 @@
         [Command("testupdatescript")]
         public Task TestScript()
         {
-            UpdateService.TestUpdateScript(Context.Channel.Id);
+            updateService.TestUpdateScript(Context.Channel.Id);
             return Task.CompletedTask;
         }
 
@@ -52,7 +59,7 @@
         public async Task RestartBot()
         {
             await ReplyAsync("Restarting...");
-            UpdateService.Restart();
+            updateService.Restart();
         }
 
         [Permission(typeof(AdminModule), "reload-plugins")]
