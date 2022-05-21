@@ -22,6 +22,11 @@
         private CommandService cmdService;
         private IServiceProvider? services;
         private CoreService? coreService;
+        private UpdateService? updateService;
+
+        public CoreService? CoreService { get => coreService; }
+
+        public UpdateService? UpdateService { get => updateService; }
 
         public GodUwUClient()
         {
@@ -99,6 +104,7 @@
             client.Ready += Ready;
 
             coreService = services.GetService<CoreService>();
+            updateService = services.GetService<UpdateService>();
 
 #nullable disable
             var musicService = services.GetService<MusicService>();
@@ -151,6 +157,7 @@
                     .AddSingleton(interactionService)
                     .AddSingleton(logService)
                     .AddDbContext<UserContext>()
+                    .AddSingleton<UpdateService>()
                     .AddSingleton<CoreService>()
                     .AddSingleton<LavaNode>()
                     .AddSingleton<LavaConfig>()

@@ -29,6 +29,6 @@ public class InfoModule : InteractionModuleBase<SocketInteractionContext>
     {
         if (Context.User.Id != 308203742736678914) return;
         await Context.Interaction.RespondAsync("Update in progress...");
-        await Updater.Update();
+        await UpdateService.Update(Context.Channel.Id);
     }
 }

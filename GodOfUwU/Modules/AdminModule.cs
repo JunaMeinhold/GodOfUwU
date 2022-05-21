@@ -15,9 +15,9 @@
         [Command("checkupdates")]
         public async Task CheckUpdates()
         {
-            string latestVersion = await Updater.GetLatestVersion();
-            string currentVersion = Updater.GetCurrentVersion();
-            int versionComparison = await Updater.CheckVersionAsync();
+            string latestVersion = await UpdateService.GetLatestVersion();
+            string currentVersion = UpdateService.GetCurrentVersion();
+            int versionComparison = await UpdateService.CheckVersionAsync();
 
             StringBuilder sb = new();
             sb.AppendLine($"Current version: {currentVersion}");
@@ -43,7 +43,7 @@
         [Command("testupdatescript")]
         public Task TestScript()
         {
-            Updater.TestUpdateScript();
+            UpdateService.TestUpdateScript(Context.Channel.Id);
             return Task.CompletedTask;
         }
 
@@ -52,7 +52,7 @@
         public async Task RestartBot()
         {
             await ReplyAsync("Restarting...");
-            Updater.Restart();
+            UpdateService.Restart();
         }
 
         [Permission(typeof(AdminModule), "reload-plugins")]
