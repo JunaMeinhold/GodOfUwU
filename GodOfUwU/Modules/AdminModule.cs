@@ -30,6 +30,9 @@
             sb.AppendLine($"Current version: {currentVersion}");
             sb.AppendLine($"Latest version: {latestVersion}");
             sb.AppendLine(versionComparison < 0 ? "A new version is available" : versionComparison > 0 ? ":O you are using a newer version than my mom published" : "The bot is up to date");
+            sb.AppendLine();
+            sb.AppendLine("Changelog:");
+            sb.AppendLine(await updateService.GetChangelog());
 
             EmbedBuilder builder = new();
             builder.AddField(new EmbedFieldBuilder()

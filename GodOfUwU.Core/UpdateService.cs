@@ -127,6 +127,15 @@
             return Assembly.GetExecutingAssembly().GetName()?.Version?.ToString() ?? string.Empty;
         }
 
+        public async Task<string> GetChangelog()
+        {
+            GitHubClient client = new(new ProductHeaderValue("GodOfUwULauncher"));
+
+            IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("JunaMeinhold", "GodOfUwU");
+
+            return releases[0].Body;
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         public async Task Update(ulong channelId)
         {

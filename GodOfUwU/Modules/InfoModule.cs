@@ -35,7 +35,9 @@ public class InfoModule : InteractionModuleBase<SocketInteractionContext>
     public async Task Update()
     {
         if (Context.User.Id != 308203742736678914) return;
-        await Context.Interaction.RespondAsync("Update in progress...");
+        EmbedBuilder builder = new();
+        builder.AddField("Updater", "Update in progress this could take a minute or two...");
+        await Context.Interaction.RespondAsync(embed: builder.Build());
         await updateService.Update(Context.Channel.Id);
     }
 }
