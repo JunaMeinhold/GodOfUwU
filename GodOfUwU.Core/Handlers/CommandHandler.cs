@@ -49,7 +49,7 @@ public class CommandHandler
             return;
 
         if (!(
-            userMessage.HasCharPrefix('!', ref argPos) ||
+            userMessage.HasCharPrefix('&', ref argPos) ||
             userMessage.HasMentionPrefix(_client.CurrentUser, ref argPos) ||
             userMessage.Author.IsBot))
             return;

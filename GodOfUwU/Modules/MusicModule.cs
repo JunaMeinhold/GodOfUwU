@@ -162,4 +162,160 @@ namespace GodOfUwU.Modules
             }
         }
     }
+
+    [PermissionNamespace(typeof(Music2Module), "music")]
+    public class Music2Module : ModuleBase<SocketCommandContext>
+    {
+        private readonly MusicService _musicService;
+
+        public Music2Module(MusicService musicService)
+        {
+            _musicService = musicService;
+        }
+
+        [Command("join")]
+        public async Task Join()
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (Context.Channel is not ITextChannel channel) return;
+                await _musicService.ConnectAsync(user.VoiceChannel, channel);
+                await ReplyAsync($"now connected to {user.VoiceChannel.Name}");
+            }
+        }
+
+        [Command("leave")]
+        public async Task Leave()
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("Please join the channel the bot is in to make it leave.");
+            }
+            else
+            {
+                await _musicService.LeaveAsync(user.VoiceChannel);
+                await ReplyAsync($"Bot has now left {user.VoiceChannel.Name}");
+            }
+        }
+
+        [Command("play")]
+        public async Task Play([Remainder] string query)
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (Context.Channel is not ITextChannel channel) return;
+
+                if (!_musicService.HasPlayer(Context.Guild))
+                    await _musicService.ConnectAsync(user.VoiceChannel, channel);
+                await ReplyAsync(await _musicService.PlayAsync(query, Context.Guild.Id));
+            }
+        }
+
+        [Command("stop")]
+        public async Task Stop()
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (_musicService.HasPlayer(Context.Guild))
+                {
+                    await _musicService.StopAsync(Context.Guild.Id);
+                    await _musicService.LeaveAsync(user.VoiceChannel);
+                    await ReplyAsync($"Bot has now left {user.VoiceChannel.Name}");
+                }
+                else
+                    await ReplyAsync("The bot is not connected to any server.");
+            }
+        }
+
+        [Command("skip")]
+        public async Task Skip()
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (_musicService.HasPlayer(Context.Guild))
+                    await ReplyAsync(await _musicService.SkipAsync(Context.Guild.Id));
+                else
+                    await ReplyAsync("The bot is not connected to any server.");
+            }
+        }
+
+        [Command("volume")]
+        public async Task Volume(int vol)
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (_musicService.HasPlayer(Context.Guild))
+                    await ReplyAsync(await _musicService.SetVolumeAsync(vol, Context.Guild.Id));
+                else
+                    await ReplyAsync("The bot is not connected to any server.");
+            }
+        }
+
+        [Command("pause")]
+        public async Task Pause()
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (_musicService.HasPlayer(Context.Guild))
+                    await ReplyAsync(await _musicService.PauseOrResumeAsync(Context.Guild.Id));
+                else
+                    await ReplyAsync("The bot is not connected to any server.");
+            }
+        }
+
+        [Command("resume")]
+        public async Task Resume()
+        {
+            if (Context.User is not SocketGuildUser user) return;
+            if (user.VoiceChannel is null)
+            {
+                await ReplyAsync("You need to connect to a voice channel.");
+                return;
+            }
+            else
+            {
+                if (_musicService.HasPlayer(Context.Guild))
+                    await ReplyAsync(await _musicService.ResumeAsync(Context.Guild.Id));
+                else
+                    await ReplyAsync("The bot is not connected to any server.");
+            }
+        }
+    }
 }
